@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  ollama:
+    image: ollama/ollama:latest
+    container_name: ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+    restart: unless-stopped
+    networks:
+      - llm-network
+
+  rag-api:
+    build: ./rag-service
+    container_name: rag-api
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./data:/app/data
+      - ./uploads:/app/uploads
+    environment:
+      - OLLAMA_URL=http://ollama:11434
+      - MODEL_NAME=llama3:8b-instruct
+    depends_on:
+      - ollama
+    restart: unless-stopped
+    networks:
+      - llm-network
+
+volumes:
+  ollama_data:
+
+networks:
+  llm-network:
+    driver: bridge

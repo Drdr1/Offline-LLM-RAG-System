@@ -4,22 +4,22 @@ A complete, portable, offline LLM system with RAG capabilities for PDF documents
 
 ##  Features
 
-- ** 100% Offline**: No internet required after setup
-- ** PDF Processing**: Upload and index PDF documents
-- ** Q&A with Citations**: Ask questions and get answers with source references
-- ** Simple Web UI**: Clean, intuitive interface
-- ** Docker-based**: Containerized and portable
-- ** USB Shippable**: Complete system fits on 64GB USB drive
-- ** Local Processing**: Everything runs on your hardware
+-  100% Offline: No internet required after setup
+-  PDF Processing: Upload and index PDF documents
+-  Q&A with Citations: Ask questions and get answers with source references
+-  Simple Web UI: Clean, intuitive interface
+-  Docker-based: Containerized and portable
+-  USB Shippable: Complete system fits on 64GB USB drive
+-  Local Processing: Everything runs on your hardware
 
 
 ##  Requirements
 
 ### Hardware
-- **CPU**: 4+ cores (8+ recommended)
-- **RAM**: 16GB minimum (32GB recommended)
-- **Storage**: 50GB free space
-- **USB**: 64GB+ for shipping
+- CPU: 4+ cores (8+ recommended)
+- RAM: 16GB minimum (32GB recommended)
+- Storage: 50GB free space
+- USB: 64GB+ for shipping
 
 ### Software
 - Ubuntu 24.04 LTS

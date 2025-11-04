@@ -22,7 +22,7 @@ services:
       - ./uploads:/app/uploads
     environment:
       - OLLAMA_URL=http://ollama:11434
-      - MODEL_NAME=llama3:8b-instruct
+      - MODEL_NAME=llama3
     depends_on:
       - ollama
     restart: unless-stopped

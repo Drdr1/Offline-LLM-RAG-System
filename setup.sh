@@ -18,7 +18,8 @@ mkdir -p usb-package/{docker-images,ollama-models,system-packages}
 echo ""
 echo "Exporting Docker images (this may take a while)..."
 docker pull ollama/ollama:latest
-docker save ollama/ollama:latest -o usb-package/docker-images/ollama.tar
+docker save offline-llm_rag-api:latest -o usb-package/docker-images/rag-api.tar 2>/dev/null || \
+docker save offline-llm-rag-api:latest -o usb-package/docker-images/rag-api.tar
 echo "✓ Ollama image exported"
 
 # Build and export RAG service

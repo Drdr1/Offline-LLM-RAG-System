@@ -32,7 +32,7 @@ echo "✓ RAG API image exported"
 echo ""
 echo "Downloading LLaMA model (this will take several GB and time)..."
 docker run --rm -v $(pwd)/usb-package/ollama-models:/root/.ollama ollama/ollama:latest \
-    ollama pull llama3:8b-instruct
+    ollama pull llama3:latest
 echo "✓ LLaMA model downloaded"
 
 # Download system packages

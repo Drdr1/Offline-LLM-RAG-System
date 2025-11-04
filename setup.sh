@@ -14,18 +14,22 @@ echo ""
 echo "Creating directory structure..."
 mkdir -p usb-package/{docker-images,ollama-models,system-packages}
 
-# Export Docker images
+# Pull and export Ollama image
 echo ""
-echo "Exporting Docker images (this may take a while)..."
+echo "Pulling Ollama image..."
 docker pull ollama/ollama:latest
-docker save offline-llm_rag-api:latest -o usb-package/docker-images/rag-api.tar 2>/dev/null || \
-docker save offline-llm-rag-api:latest -o usb-package/docker-images/rag-api.tar
+echo "Exporting Ollama image..."
+docker save ollama/ollama:latest -o usb-package/docker-images/ollama.tar
 echo "✓ Ollama image exported"
 
-# Build and export RAG service
+# Build RAG service
 echo ""
-echo "Building RAG service..."
+echo "Building RAG service (this may take 10-15 minutes)..."
 docker-compose build
+
+# Export RAG service image (try both possible names)
+echo "Exporting RAG API image..."
+docker save offline-llm_rag-api:latest -o usb-package/docker-images/rag-api.tar 2>/dev/null || \
 docker save offline-llm-rag-api:latest -o usb-package/docker-images/rag-api.tar
 echo "✓ RAG API image exported"
 
@@ -40,7 +44,7 @@ echo "✓ LLaMA model downloaded"
 echo ""
 echo "Downloading system packages..."
 cd usb-package/system-packages
-apt-get download docker.io docker-compose
+apt-get download docker.io docker-compose 2>/dev/null || echo "Note: Run with sudo if package download fails"
 cd ../..
 echo "✓ System packages downloaded"
 
@@ -84,6 +88,8 @@ echo "✓ Setup complete!"
 echo "======================================"
 echo ""
 echo "USB package created at: ./usb-package/"
+echo "Total size:"
+du -sh usb-package/
 echo ""
 echo "Next steps:"
 echo "1. Copy the 'usb-package' folder to your USB drive"

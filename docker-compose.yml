@@ -12,17 +12,23 @@ services:
     networks:
       - llm-network
 
-  rag-api:
-    build: ./rag-service
-    container_name: rag-api
+  open-webui:
+    image: ghcr.io/open-webui/open-webui:main
+    container_name: open-webui
     ports:
-      - "8000:8000"
+      - "8080:8080"
     volumes:
-      - ./data:/app/data
-      - ./uploads:/app/uploads
+      - open_webui_data:/app/backend/data
     environment:
-      - OLLAMA_URL=http://ollama:11434
-      - MODEL_NAME=llama3
+      - OLLAMA_BASE_URL=http://ollama:11434
+      - WEBUI_SECRET_KEY=your-secret-key-change-this
+      - ENV=production
+      # Enable RAG (Document chat)
+      - RAG_EMBEDDING_MODEL=all-MiniLM-L6-v2
+      - ENABLE_RAG_WEB_SEARCH=false
+      - ENABLE_RAG_LOCAL_WEB_FETCH=false
+      # Default model
+      - DEFAULT_MODELS=llama3:latest
     depends_on:
       - ollama
     restart: unless-stopped
@@ -31,6 +37,7 @@ services:
 
 volumes:
   ollama_data:
+  open_webui_data:
 
 networks:
   llm-network:

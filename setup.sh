@@ -1,12 +1,13 @@
 #!/bin/bash
 
-# Offline LLM System Setup Script
+# Offline LLM System Setup Script (Open WebUI Version)
 # This script prepares all necessary files for USB installation
 
 set -e
 
 echo "======================================"
 echo "Offline LLM System - Setup Script"
+echo "Open WebUI Version"
 echo "======================================"
 echo ""
 
@@ -22,16 +23,13 @@ echo "Exporting Ollama image..."
 docker save ollama/ollama:latest -o usb-package/docker-images/ollama.tar
 echo "✓ Ollama image exported"
 
-# Build RAG service
+# Pull and export Open WebUI image
 echo ""
-echo "Building RAG service (this may take 10-15 minutes)..."
-docker-compose build
-
-# Export RAG service image (try both possible names)
-echo "Exporting RAG API image..."
-docker save offline-llm_rag-api:latest -o usb-package/docker-images/rag-api.tar 2>/dev/null || \
-docker save offline-llm-rag-api:latest -o usb-package/docker-images/rag-api.tar
-echo "✓ RAG API image exported"
+echo "Pulling Open WebUI image..."
+docker pull ghcr.io/open-webui/open-webui:main
+echo "Exporting Open WebUI image..."
+docker save ghcr.io/open-webui/open-webui:main -o usb-package/docker-images/open-webui.tar
+echo "✓ Open WebUI image exported"
 
 # Download Ollama model
 echo ""
@@ -51,7 +49,6 @@ echo "✓ System packages downloaded"
 # Copy project files
 echo ""
 echo "Copying project files..."
-cp -r rag-service usb-package/
 cp docker-compose.yml usb-package/
 cp install.sh usb-package/
 chmod +x usb-package/install.sh
@@ -59,25 +56,36 @@ echo "✓ Project files copied"
 
 # Create README
 cat > usb-package/README.txt << 'EOF'
-OFFLINE LLM SYSTEM - USB PACKAGE
-=================================
+OFFLINE LLM SYSTEM - USB PACKAGE (Open WebUI)
+==============================================
 
 This package contains everything needed to install and run
-the offline LLM RAG system on Ubuntu 24.04.
+the offline LLM RAG system with Open WebUI on Ubuntu 24.04.
 
 Contents:
-- docker-images/     : Pre-built Docker images
+- docker-images/     : Pre-built Docker images (Ollama + Open WebUI)
 - ollama-models/     : Pre-downloaded LLaMA model
 - system-packages/   : Ubuntu packages for Docker
-- rag-service/       : RAG application code
 - docker-compose.yml : Docker orchestration config
 - install.sh         : Installation script
+
+Features:
+- Professional ChatGPT-like interface
+- Built-in document upload and RAG
+- Chat history and conversations
+- User management
+- Dark/light themes
 
 Installation:
 1. Boot Ubuntu 24.04
 2. Copy this entire folder to the system
 3. Run: sudo ./install.sh
-4. Access at: http://localhost:8000
+4. Access at: http://localhost:8080
+
+First time:
+- Create an account (first user is admin)
+- Upload documents via the interface
+- Chat with your documents!
 
 For detailed instructions, see INSTALLATION.md
 EOF
@@ -91,8 +99,15 @@ echo "USB package created at: ./usb-package/"
 echo "Total size:"
 du -sh usb-package/
 echo ""
+echo "Contents:"
+echo "  - Ollama image + LLaMA 3 model"
+echo "  - Open WebUI image (professional UI)"
+echo "  - System packages"
+echo "  - Configuration files"
+echo ""
 echo "Next steps:"
 echo "1. Copy the 'usb-package' folder to your USB drive"
 echo "2. Boot the target system with Ubuntu 24.04"
 echo "3. Run the install.sh script from the USB"
+echo "4. Access Open WebUI at http://localhost:8080"
 echo ""

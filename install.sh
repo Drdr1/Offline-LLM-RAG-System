@@ -1,12 +1,13 @@
 #!/bin/bash
 
-# Offline LLM System - Installation Script
+# Offline LLM System - Installation Script (Open WebUI Version)
 # Run this on the target Ubuntu 24.04 system
 
 set -e
 
 echo "======================================"
 echo "Offline LLM System - Installation"
+echo "Open WebUI Version"
 echo "======================================"
 echo ""
 
@@ -42,7 +43,7 @@ echo "✓ Added $CURRENT_USER to docker group"
 echo ""
 echo "Loading Docker images..."
 docker load -i $SCRIPT_DIR/docker-images/ollama.tar
-docker load -i $SCRIPT_DIR/docker-images/rag-api.tar
+docker load -i $SCRIPT_DIR/docker-images/open-webui.tar
 echo "✓ Docker images loaded"
 
 # Create installation directory
@@ -50,9 +51,7 @@ INSTALL_DIR="/opt/offline-llm"
 echo ""
 echo "Creating installation directory at $INSTALL_DIR..."
 mkdir -p $INSTALL_DIR
-cp -r $SCRIPT_DIR/rag-service $INSTALL_DIR/
 cp $SCRIPT_DIR/docker-compose.yml $INSTALL_DIR/
-mkdir -p $INSTALL_DIR/data $INSTALL_DIR/uploads
 
 # Copy Ollama models
 echo ""
@@ -67,7 +66,7 @@ echo ""
 echo "Creating systemd service..."
 cat > /etc/systemd/system/offline-llm.service << EOF
 [Unit]
-Description=Offline LLM RAG System
+Description=Offline LLM RAG System with Open WebUI
 Requires=docker.service
 After=docker.service
 
@@ -95,7 +94,7 @@ docker-compose up -d
 
 echo ""
 echo "Waiting for services to start..."
-sleep 10
+sleep 15
 
 # Check if Ollama model is available
 echo ""
@@ -109,7 +108,13 @@ echo "======================================"
 echo ""
 echo "The system is now running!"
 echo ""
-echo "Access the web interface at: http://localhost:8000"
+echo "Access Open WebUI at: http://localhost:8080"
+echo ""
+echo "First time setup:"
+echo "  1. Open http://localhost:8080 in your browser"
+echo "  2. Create an account (first user becomes admin)"
+echo "  3. Start chatting with LLaMA 3!"
+echo "  4. Upload documents via the '+' button for RAG"
 echo ""
 echo "Useful commands:"
 echo "  Start:   sudo systemctl start offline-llm"
